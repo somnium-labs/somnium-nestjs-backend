@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package auth;
+
+enum AuthType {
+  EMAIL = 0;
+  GOOGLE = 1;
+  APPLE = 2;
+  FACEBOOK = 3;
+  TWITTER = 4;
+  KAKAO = 5;
+  LINE = 6;
+}
+
+service AuthService {
+  rpc googleLogin(GoogleAuthRequest) returns (AuthResponse) {}
+  rpc kakaoLogin(KakaoAuthRequest) returns (AuthResponse) {}
+  rpc appleLogin(LineAuthRequest) returns (AuthResponse) {}
+  rpc facebookLogin(FacebookAuthRequest) returns (AuthResponse) {}
+  rpc twitterLogin(TwitterAuthRequest) returns (AuthResponse) {}
+  rpc lineLogin(LineAuthRequest) returns (AuthResponse) {}
+}
+
+message AuthResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
+
+message GoogleAuthRequest {
+  string idToken = 1;
+  string clientId = 2;
+}
+
+message AppleAuthRequest {
+  string idToken = 1;
+  string nonce = 2;
+  string audience = 3;
+}
+
+message FacebookAuthRequest {
+  string accessToken = 1;
+}
+
+message TwitterAuthRequest {
+  string authToken = 1;
+  string authTokenSecret = 2;
+}
+
+message KakaoAuthRequest {
+  string idToken = 1;
+  string nonce = 2;
+}
+
+message LineAuthRequest {
+  string idToken = 1;
+}

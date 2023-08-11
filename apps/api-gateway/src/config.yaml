@@ -1,0 +1,34 @@
+server:
+  port: 3000
+
+rabbitmq:
+  user: admin
+  pass: admin
+
+slack:
+  token: xoxb-5697890324212-5725328248161-c3xZTfHwdDckB535fpYGK5ZD
+  webhook:
+    notification: https://hooks.slack.com/services/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
+
+db:
+  uri: mongodb://root:secret@localhost:27017
+  name: mobile
+
+elasticsearch:
+  host: https://127.0.0.1:9200
+  username: elastic
+  password: 0dim3F8r0T0yNfu-e-PN
+
+redis:
+  cluster:
+    - host: localhost
+      port: 7001
+    - host: localhost
+      port: 7002
+    - host: localhost
+      port: 7003
+
+jwt:
+  accessExpiration: 1d
+  refreshExpiration: 180d
+  secret: QVUri196zPlF2Re8mKaihOX2bS13P4c37N9IaLLptCcR6Q1tnwi59pubmqcV402eex5cHUB6Fw49EkTZXZ4CWg==
