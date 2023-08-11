@@ -1,4 +1,12 @@
-import { AuthResponse, GoogleAuthRequest, KakaoAuthRequest } from 'proto/auth';
+import {
+  AppleAuthRequest,
+  AuthResponse,
+  FacebookAuthRequest,
+  GoogleAuthRequest,
+  KakaoAuthRequest,
+  LineAuthRequest,
+  TwitterAuthRequest,
+} from 'proto/auth';
 
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
@@ -21,6 +29,33 @@ export class OAuthController {
     return await this.oauthService.kakaoAuthentication(
       request.idToken,
       request.nonce,
+    );
+  }
+
+  @GrpcMethod('AuthService', 'appleLogin')
+  async appleLogin(request: AppleAuthRequest): Promise<AuthResponse> {
+    return await this.oauthService.appleAuthentication(
+      request.idToken,
+      request.nonce,
+      request.audience,
+    );
+  }
+
+  @GrpcMethod('AuthService', 'lineLogin')
+  async lineLogin(request: LineAuthRequest): Promise<AuthResponse> {
+    return await this.oauthService.lineAuthentication(request.idToken);
+  }
+
+  @GrpcMethod('AuthService', 'facebookLogin')
+  async facebookLogin(request: FacebookAuthRequest): Promise<AuthResponse> {
+    return await this.oauthService.facebookAuthentication(request.accessToken);
+  }
+
+  @GrpcMethod('AuthService', 'twitterLogin')
+  async twitterLogin(request: TwitterAuthRequest): Promise<AuthResponse> {
+    return await this.oauthService.twitterAuthentication(
+      request.authToken,
+      request.authTokenSecret,
     );
   }
 

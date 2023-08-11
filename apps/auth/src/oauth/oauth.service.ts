@@ -54,6 +54,37 @@ export class OAuthService {
     return this.generateJwt(user);
   }
 
+  async twitterAuthentication(authToken: string, authTokenSecret: string) {
+    const result = await this.twitterLogin.validateToken(
+      authToken,
+      authTokenSecret,
+    );
+    const user = await this.findOrCreateUser(OAuthProvider.TWITTER, result);
+    return this.generateJwt(user);
+  }
+
+  async appleAuthentication(idToken: string, nonce: string, audience: string) {
+    const result = await this.appleLogin.verifyIdToken(
+      idToken,
+      nonce,
+      audience,
+    );
+    const user = await this.findOrCreateUser(OAuthProvider.APPLE, result);
+    return this.generateJwt(user);
+  }
+
+  async lineAuthentication(idToken: string) {
+    const result = await this.lineLogin.verifyIdToken(idToken);
+    const user = await this.findOrCreateUser(OAuthProvider.LINE, result);
+    return this.generateJwt(user);
+  }
+
+  async facebookAuthentication(accessToken: string) {
+    const result = await this.facebookLogin.verifyAccessToken(accessToken);
+    const user = await this.findOrCreateUser(OAuthProvider.FACEBOOK, result);
+    return this.generateJwt(user);
+  }
+
   /**
    * JWT 토큰 생성
    *

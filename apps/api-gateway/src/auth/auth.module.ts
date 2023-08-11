@@ -5,7 +5,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Global, Module } from '@nestjs/common';
 
 import { AuthController } from '@api-gateway/auth/auth.controller';
-import { AuthService } from './auth.service';
 import { config } from '@api-gateway/config';
 import { join } from 'path';
 import { protobufPackage } from 'proto/auth';
@@ -67,7 +66,5 @@ import { protobufPackage } from 'proto/auth';
     ]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService],
 })
 export class AuthModule {}

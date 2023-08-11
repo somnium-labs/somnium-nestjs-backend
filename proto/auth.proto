@@ -15,7 +15,7 @@ enum AuthType {
 service AuthService {
   rpc googleLogin(GoogleAuthRequest) returns (AuthResponse) {}
   rpc kakaoLogin(KakaoAuthRequest) returns (AuthResponse) {}
-  rpc appleLogin(LineAuthRequest) returns (AuthResponse) {}
+  rpc appleLogin(AppleAuthRequest) returns (AuthResponse) {}
   rpc facebookLogin(FacebookAuthRequest) returns (AuthResponse) {}
   rpc twitterLogin(TwitterAuthRequest) returns (AuthResponse) {}
   rpc lineLogin(LineAuthRequest) returns (AuthResponse) {}

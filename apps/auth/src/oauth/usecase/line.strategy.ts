@@ -1,18 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class LineLogin {
-  private readonly issuer: string = 'https://access.line.me';
   private readonly audience: string = '2000138625';
 
-  constructor(
-    private readonly logger: Logger,
-    private readonly configService: ConfigService,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async verifyIdToken(idToken: string) {
     try {

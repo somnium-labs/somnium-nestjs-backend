@@ -602,7 +602,7 @@ export const LineAuthRequest = {
 export interface AuthService {
   googleLogin(request: GoogleAuthRequest): Promise<AuthResponse>;
   kakaoLogin(request: KakaoAuthRequest): Promise<AuthResponse>;
-  appleLogin(request: LineAuthRequest): Promise<AuthResponse>;
+  appleLogin(request: AppleAuthRequest): Promise<AuthResponse>;
   facebookLogin(request: FacebookAuthRequest): Promise<AuthResponse>;
   twitterLogin(request: TwitterAuthRequest): Promise<AuthResponse>;
   lineLogin(request: LineAuthRequest): Promise<AuthResponse>;
@@ -634,8 +634,8 @@ export class AuthServiceClientImpl implements AuthService {
     return promise.then((data) => AuthResponse.decode(_m0.Reader.create(data)));
   }
 
-  appleLogin(request: LineAuthRequest): Promise<AuthResponse> {
-    const data = LineAuthRequest.encode(request).finish();
+  appleLogin(request: AppleAuthRequest): Promise<AuthResponse> {
+    const data = AppleAuthRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "appleLogin", data);
     return promise.then((data) => AuthResponse.decode(_m0.Reader.create(data)));
   }

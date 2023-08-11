@@ -1,6 +1,8 @@
-import { Global, Module } from '@nestjs/common';
 import * as http from 'http';
 import * as https from 'https';
+
+import { Global, Module } from '@nestjs/common';
+
 import { HttpModule } from '@nestjs/axios';
 
 @Global()

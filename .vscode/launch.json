@@ -1,0 +1,32 @@
+{
+  "version": "0.2.0",
+  "compounds": [
+    {
+      "name": "All",
+      "configurations": ["API Gateway", "Auth Service"],
+      "stopAll": true
+    }
+  ],
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "API Gateway",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:api-gateway:debug"],
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Auth Service",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:auth:debug"],
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
