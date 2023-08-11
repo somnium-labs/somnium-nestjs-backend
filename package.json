@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "copy-asset": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. proto/*.proto && mkdir -p dist/proto && cp proto/*.proto dist/proto/",
+    "build:proto": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=. proto/*.proto && mkdir -p dist/proto && cp proto/*.proto dist/proto/",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start:api-gateway": "cross-env NODE_ENV=prod nest start api-gateway",
     "start:api-gateway:dev": "cross-env NODE_ENV=dev nest start api-gateway --watch",

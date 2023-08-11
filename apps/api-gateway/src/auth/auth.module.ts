@@ -5,23 +5,26 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Global, Module } from '@nestjs/common';
 
 import { AuthController } from '@api-gateway/auth/auth.controller';
-import { config } from '@api-gateway/config';
 import { join } from 'path';
 import { protobufPackage } from 'proto/auth';
 
+//192.168.0.67:10000
 @Global()
 @Module({
   imports: [
-    ClientsModule.register([
+    ClientsModule.registerAsync([
       {
         name: 'GRPC_AUTH',
-        transport: Transport.GRPC,
-        options: {
-          url: config.grpc.auth,
-          package: protobufPackage,
-          protoPath: join(__dirname, '../../proto/auth.proto'),
-          credentials: grpc.credentials.createInsecure(), // TLS 비활성화
-        },
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.GRPC,
+          options: {
+            url: configService.get('config.grpc.auth'),
+            package: protobufPackage,
+            protoPath: join(__dirname, '../../proto/auth.proto'),
+            credentials: grpc.credentials.createInsecure(), // TLS 비활성화
+          },
+        }),
       },
     ]),
     ClientsModule.registerAsync([

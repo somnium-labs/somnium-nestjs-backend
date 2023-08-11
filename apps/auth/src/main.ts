@@ -17,6 +17,8 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  const logger = createWinstonLogger(configService);
+  app.useLogger(logger);
 
   // PM2 인스턴스 별로 포트를 다르게 설정
   const PORT_BASE = 50000;
@@ -24,7 +26,10 @@ async function bootstrap() {
     PORT_BASE +
     (process.env.NODE_APP_INSTANCE
       ? parseInt(process.env.NODE_APP_INSTANCE)
-      : 1);
+      : 0);
+
+  logger.log(`current port: ${currentPort}`);
+  logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
 
   // microservice #GRPC
   app.connectMicroservice<MicroserviceOptions>({
@@ -58,8 +63,6 @@ async function bootstrap() {
     });
   }
 
-  const logger = createWinstonLogger(configService);
-  app.useLogger(logger);
   await app.startAllMicroservices();
 }
 

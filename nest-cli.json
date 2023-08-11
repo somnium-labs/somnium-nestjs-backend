@@ -52,7 +52,11 @@
       "entryFile": "index",
       "sourceRoot": "libs/core/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/core/tsconfig.lib.json"
+        "tsConfigPath": "libs/core/tsconfig.lib.json",
+        "watchAssets": true,
+        "assets": [
+          "**/*.yaml"
+        ]
       }
     }
   }

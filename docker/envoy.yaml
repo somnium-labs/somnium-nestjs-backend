@@ -30,7 +30,6 @@ static_resources:
                         - match:
                             prefix: '/'
                           route:
-                            # host_rewrite_literal: somniumlabs.net
                             cluster: grpc_backend
                 http_filters:
                   - name: envoy.filters.http.router
@@ -58,12 +57,12 @@ static_resources:
                   address:
                     socket_address:
                       address: host.docker.internal
-                      port_value: 50001
+                      port_value: 50000
               - endpoint:
                   address:
                     socket_address:
                       address: host.docker.internal
-                      port_value: 50002
+                      port_value: 50001
 
         # transport_socket:
         #   name: envoy.transport_sockets.tls

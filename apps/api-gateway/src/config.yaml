@@ -10,14 +10,13 @@ slack:
   webhook:
     notification: https://hooks.slack.com/services/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
 
-db:
-  uri: mongodb://root:secret@localhost:27017
-  name: mobile
-
 elasticsearch:
   host: https://127.0.0.1:9200
   username: elastic
   password: 0dim3F8r0T0yNfu-e-PN
+
+grpc:
+  auth: 192.168.0.67:10000
 
 redis:
   cluster:
