@@ -17,7 +17,8 @@
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json",
         "watchAssets": true,
         "assets": [
-          "**/*.yaml"
+          "**/*.yaml",
+          "../config/**/*.yaml"
         ],
         "plugins": [
           {
@@ -42,7 +43,8 @@
         "tsConfigPath": "apps/auth/tsconfig.app.json",
         "watchAssets": true,
         "assets": [
-          "**/*.yaml"
+          "**/*.yaml",
+          "../config/**/*.yaml"
         ]
       }
     },
