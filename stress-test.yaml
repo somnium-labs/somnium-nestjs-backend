@@ -1,0 +1,18 @@
+config:
+  target: 'http://localhost:3000'
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      name: Warm up
+    - duration: 30
+      arrivalRate: 5
+      rampTo: 50
+      name: Ramp up load
+
+scenarios:
+  - flow:
+      - post:
+          url: '/auth/kakao-authentication'
+          json:
+            idToken: 'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJhOWMzYTIzNTg5ODA0YjM4NzEyYTMwMGYyNmFkY2YwMiIsInN1YiI6IjI5NDQzODM3MDgiLCJhdXRoX3RpbWUiOjE2OTE4MzA2NTIsImlzcyI6Imh0dHBzOi8va2F1dGgua2FrYW8uY29tIiwiZXhwIjoxNjkxODczODUyLCJpYXQiOjE2OTE4MzA2NTIsIm5vbmNlIjoiMzAwYjIxYTItZTc2YS00NjA2LTk3YTUtMWUyMzk5Mjk3MzJjIn0.Hc9Dab_T_xxkSSoeomyfGrl3aPX6GJClsh-elXQm-l0h-D1q9QzbxYN68vRmqSvJvRX08ll-6NXE3kT1U_o53miOc4MjWwtnMu24RtmY3LqIyBoon4rRW5TG2wAqJozNHqjIMbw1a_Jr1qigbKSrKzJauVQW9QEfgK2spF-idGsx1un1V4HDeeq0ApX3otV63JKN8xgRjbMLpyragAtAKEn9aY2IR3RGcZo5u3vZll7O42qlIQ00zzFvZgenYFivKeqp2bqbOv1Fe3lrOQxbzaXT4yN-fB00PxgrTeVr3WgzTauMQVMDOa4xUoq2j0sfHNcod4Hi925MQPaWCe5szA'
+            nonce: '300b21a2-e76a-4606-97a5-1e239929732c'

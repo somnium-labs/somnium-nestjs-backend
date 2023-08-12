@@ -63,6 +63,16 @@ static_resources:
                     socket_address:
                       address: host.docker.internal
                       port_value: 50001
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: host.docker.internal
+                      port_value: 50002
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: host.docker.internal
+                      port_value: 50003
 
         # transport_socket:
         #   name: envoy.transport_sockets.tls
