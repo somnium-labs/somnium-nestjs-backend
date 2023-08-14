@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'api-gateway',
       script: 'dist/apps/api-gateway/main.js',
-      instances: 1,
+      instances: 2,
       env: {
         NODE_ENV: 'dev',
       },
@@ -12,7 +12,7 @@ module.exports = {
     {
       name: 'auth',
       script: 'dist/apps/auth/main.js',
-      instances: 3,
+      instances: 2,
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'dev',
