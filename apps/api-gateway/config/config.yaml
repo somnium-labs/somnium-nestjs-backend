@@ -20,11 +20,11 @@ grpc:
 
 redis:
   cluster:
-    - host: localhost
+    - host: 192.168.0.67
       port: 7001
-    - host: localhost
+    - host: 192.168.0.67
       port: 7002
-    - host: localhost
+    - host: 192.168.0.67
       port: 7003
 
 jwt:

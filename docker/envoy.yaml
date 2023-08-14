@@ -28,13 +28,13 @@ static_resources:
                       domains: ['*']
                       routes:
                         - match:
-                            prefix: '/auth'
-                          route:
-                            cluster: grpc_backend
-                        - match:
                             prefix: '/api'
                           route:
                             cluster: api_gateway
+                        - match:
+                            prefix: '/'
+                          route:
+                            cluster: grpc_backend
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
