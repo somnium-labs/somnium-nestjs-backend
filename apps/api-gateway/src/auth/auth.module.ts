@@ -38,7 +38,7 @@ import { protobufPackage } from 'proto/auth';
           return {
             transport: Transport.RMQ,
             options: {
-              urls: [`amqp://${user}:${pass}@localhost:5672`],
+              urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
               queue: 'tasks',
               queueOptions: {
                 durable: false, // 메세지를 메모리에 저장
@@ -57,7 +57,7 @@ import { protobufPackage } from 'proto/auth';
           return {
             transport: Transport.RMQ,
             options: {
-              urls: [`amqp://${user}:${pass}@localhost:5672`],
+              urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
               queue: 'tasks2',
               queueOptions: {
                 durable: false, // 메세지를 메모리에 저장

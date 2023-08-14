@@ -3,21 +3,21 @@ module.exports = {
     {
       name: 'api-gateway',
       script: 'dist/apps/api-gateway/main.js',
-      instances: 4,
+      instances: 1,
       env: {
         NODE_ENV: 'dev',
       },
-      watch: true,
+      watch: false,
     },
     {
       name: 'auth',
       script: 'dist/apps/auth/main.js',
-      instances: 4,
+      instances: 3,
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'dev',
       },
-      watch: true,
+      watch: false
     },
   ],
 };

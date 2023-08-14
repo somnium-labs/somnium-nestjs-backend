@@ -16,6 +16,9 @@ async function bootstrap() {
     origin: '*',
   });
 
+  // 모든 컨트롤러 라우트에 접두사를 추가합니다.
+  app.setGlobalPrefix('api');
+
   setupSwagger(app);
   await app.listen(configService.get('config.server.port'));
 
@@ -36,7 +39,7 @@ function setupSwagger(app: INestApplication): void {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/api', app, document);
 }
 
 bootstrap();

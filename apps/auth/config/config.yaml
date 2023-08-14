@@ -17,5 +17,5 @@ redis:
       port: 7003
 
 mongodb:
-  uri: mongodb://root:secret@localhost:27017
+  uri: mongodb://root:secret@192.168.0.67:27017
   name: mobile

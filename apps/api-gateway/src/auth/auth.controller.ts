@@ -1,4 +1,11 @@
-import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  Logger,
+  OnModuleInit,
+  Post,
+} from '@nestjs/common';
 import { ApiOperation } from '@nestjs/swagger';
 import {
   AppleAuthRequestDto,
@@ -19,6 +26,7 @@ export class AuthController implements OnModuleInit {
   private grpcClient: AuthServiceClientImpl;
 
   constructor(
+    private readonly logger: Logger,
     @Inject('GRPC_AUTH') private client: ClientGrpc,
     @Inject('RMQ_AUTH') private readonly rmqClient: ClientProxy,
     @Inject('RMQ_AUTH2') private readonly rmqClient2: ClientProxy,

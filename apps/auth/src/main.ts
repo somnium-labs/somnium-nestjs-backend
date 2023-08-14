@@ -28,8 +28,8 @@ async function bootstrap() {
       ? parseInt(process.env.NODE_APP_INSTANCE)
       : 0);
 
-  logger.log(`current port: ${currentPort}`);
-  logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
+  // logger.log(`current port: ${currentPort}`);
+  // logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
 
   // microservice #GRPC
   app.connectMicroservice<MicroserviceOptions>({
@@ -53,7 +53,7 @@ async function bootstrap() {
     app.connectMicroservice<RmqOptions>({
       transport: Transport.RMQ,
       options: {
-        urls: [`amqp://${user}:${pass}@localhost:5672`],
+        urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
         queue: queue,
         noAck: false, // 수동 승인 모드
         queueOptions: {

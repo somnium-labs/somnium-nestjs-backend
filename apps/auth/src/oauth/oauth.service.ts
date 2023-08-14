@@ -49,6 +49,7 @@ export class OAuthService {
   }
 
   async kakaoAuthentication(idToken: string, nonce: string) {
+    this.logger.log('kakaoAuthentication');
     const result = await this.kakaoLogin.verifyIdToken(idToken, nonce);
     const user = await this.findOrCreateUser(OAuthProvider.KAKAO, result);
     return this.generateJwt(user);

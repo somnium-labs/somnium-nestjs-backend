@@ -28,19 +28,48 @@ static_resources:
                       domains: ['*']
                       routes:
                         - match:
-                            prefix: '/'
+                            prefix: '/auth'
                           route:
                             cluster: grpc_backend
+                        - match:
+                            prefix: '/api'
+                          route:
+                            cluster: api_gateway
                 http_filters:
                   - name: envoy.filters.http.router
                     typed_config:
                       '@type': type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
   clusters:
+    - name: api_gateway
+      connect_timeout: 1s
+      type: STRICT_DNS
+      lb_policy: ROUND_ROBIN
+      common_lb_config:
+        healthy_panic_threshold:
+          value: 0.0
+      load_assignment:
+        cluster_name: api_gateway
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.67
+                      port_value: 3000
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.3
+                      port_value: 3000
+
     - name: grpc_backend
       connect_timeout: 1s
       type: STRICT_DNS
       lb_policy: ROUND_ROBIN
       http2_protocol_options: {}
+      common_lb_config:
+        healthy_panic_threshold:
+          value: 0.0
       health_checks:
         - timeout: 1s
           interval: 10s
@@ -56,24 +85,24 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: host.docker.internal
+                      address: 192.168.0.67
                       port_value: 50000
               - endpoint:
                   address:
                     socket_address:
-                      address: host.docker.internal
+                      address: 192.168.0.67
                       port_value: 50001
               - endpoint:
                   address:
                     socket_address:
-                      address: host.docker.internal
-                      port_value: 50002
+                      address: 192.168.0.3
+                      port_value: 50000
               - endpoint:
                   address:
                     socket_address:
-                      address: host.docker.internal
-                      port_value: 50003
-
+                      address: 192.168.0.3
+                      port_value: 50001
+              
         # transport_socket:
         #   name: envoy.transport_sockets.tls
         #   typed_config:

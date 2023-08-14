@@ -16,7 +16,7 @@ elasticsearch:
   password: 0dim3F8r0T0yNfu-e-PN
 
 grpc:
-  auth: localhost:10000
+  auth: 192.168.0.67:10000
 
 redis:
   cluster:

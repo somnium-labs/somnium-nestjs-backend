@@ -18,7 +18,7 @@ services:
     image: redis
     command: redis-server --port 7001 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
     volumes:
-      - /var/docker/data/redis-1:/data
+      - ./data/redis-1:/data
     network_mode: somnium-labs
     ports:
       - '7001:7001'
@@ -31,7 +31,7 @@ services:
     image: redis
     command: redis-server --port 7002 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
     volumes:
-      - /var/docker/data/redis-2:/data
+      - ./data/redis-2:/data
     network_mode: 'service:redis-1'
 
   redis-3:
@@ -40,7 +40,7 @@ services:
     image: redis
     command: redis-server --port 7003 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
     volumes:
-      - /var/docker/data/redis-3:/data
+      - ./data/redis-3:/data
     network_mode: 'service:redis-1'
 
   elasticsearch:
@@ -88,11 +88,11 @@ services:
 
   envoy:
     restart: always
-    network_mode: host
+    # network_mode: host
     image: envoyproxy/envoy:dev-8468cf26bf2facd576c549fd90cdb066f8204a10
     ports:
-      - "9901:9901"
-      - "10000:10000"
+      - '9901:9901'
+      - '10000:10000'
     # command: ["envoy", "-c", "/etc/envoy/envoy.yaml", "--log-level", "debug"]
     volumes:
       - ./envoy.yaml:/etc/envoy/envoy.yaml
