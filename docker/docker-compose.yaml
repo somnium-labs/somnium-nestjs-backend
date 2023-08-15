@@ -16,32 +16,52 @@ services:
     restart: always
     container_name: redis-1
     image: redis
-    command: redis-server --port 7001 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    command: >
+      redis-server --port 7001 
+      --cluster-enabled yes 
+      --cluster-config-file nodes.conf 
+      --cluster-node-timeout 5000 
+      --appendonly yes 
+      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-port 7001 
+      --cluster-announce-bus-port 17001
     volumes:
       - ./data/redis-1:/data
-    network_mode: somnium-labs
-    ports:
-      - '7001:7001'
-      - '7002:7002'
-      - '7003:7003'
+    network_mode: host
 
   redis-2:
     restart: always
     container_name: redis-2
     image: redis
-    command: redis-server --port 7002 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    command: >
+      redis-server --port 7002 
+      --cluster-enabled yes 
+      --cluster-config-file nodes.conf 
+      --cluster-node-timeout 5000 
+      --appendonly yes 
+      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-port 7002 
+      --cluster-announce-bus-port 17002
     volumes:
       - ./data/redis-2:/data
-    network_mode: 'service:redis-1'
+    network_mode: host
 
   redis-3:
     restart: always
     container_name: redis-3
     image: redis
-    command: redis-server --port 7003 --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    command: >
+      redis-server --port 7003 
+      --cluster-enabled yes 
+      --cluster-config-file nodes.conf 
+      --cluster-node-timeout 5000 
+      --appendonly yes 
+      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-port 7003 
+      --cluster-announce-bus-port 17003
     volumes:
       - ./data/redis-3:/data
-    network_mode: 'service:redis-1'
+    network_mode: host
 
   elasticsearch:
     restart: always
@@ -88,7 +108,6 @@ services:
 
   envoy:
     restart: always
-    # network_mode: host
     image: envoyproxy/envoy:dev-8468cf26bf2facd576c549fd90cdb066f8204a10
     ports:
       - '9901:9901'

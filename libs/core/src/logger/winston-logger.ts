@@ -1,12 +1,17 @@
 import * as moment from 'moment-timezone';
 import * as winston from 'winston';
-import {
-  utilities as nestWinstonModuleUtilities,
-  WinstonModule,
-} from 'nest-winston';
-import { ConfigService } from '@nestjs/config';
 
-export function createWinstonLogger(configService: ConfigService) {
+import {
+  WinstonModule,
+  utilities as nestWinstonModuleUtilities,
+} from 'nest-winston';
+
+import { ConfigService } from '@nestjs/config';
+import { LoggerService } from '@nestjs/common';
+
+export function createWinstonLogger(
+  configService: ConfigService,
+): LoggerService {
   return WinstonModule.createLogger({
     transports: [
       new winston.transports.Console({
@@ -15,10 +20,13 @@ export function createWinstonLogger(configService: ConfigService) {
           winston.format.timestamp({
             format: () => moment().format('YYYY-MM-DD HH:mm:ss'),
           }),
-          nestWinstonModuleUtilities.format.nestLike('Nest', {
-            colors: true,
-            prettyPrint: true,
-          }),
+          nestWinstonModuleUtilities.format.nestLike(
+            configService.get('config.service.name'),
+            {
+              colors: true,
+              prettyPrint: true,
+            },
+          ),
         ),
       }),
       // new ElasticsearchTransport({

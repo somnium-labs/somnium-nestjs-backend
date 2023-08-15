@@ -47,6 +47,16 @@ static_resources:
       common_lb_config:
         healthy_panic_threshold:
           value: 0.0
+      health_checks:
+        timeout: 1s
+        interval: 10s
+        no_traffic_interval: 1s
+        no_traffic_healthy_interval: 60s
+        unhealthy_threshold: 2
+        healthy_threshold: 2
+        http_health_check:
+          path: '/api/health'
+          codec_client_type: HTTP1
       load_assignment:
         cluster_name: api_gateway
         endpoints:
@@ -59,7 +69,7 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: 192.168.0.3
+                      address: 192.168.0.28
                       port_value: 3000
 
     - name: grpc_backend
@@ -73,7 +83,8 @@ static_resources:
       health_checks:
         - timeout: 1s
           interval: 10s
-          no_traffic_interval: 1s # 클러스터에 라우팅된 트래픽이 전혀 없을 때 사용되는 간격
+          no_traffic_interval: 1s
+          no_traffic_healthy_interval: 60s
           unhealthy_threshold: 3
           healthy_threshold: 3
           grpc_health_check:
@@ -95,14 +106,14 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
-                      address: 192.168.0.3
+                      address: 192.168.0.28
                       port_value: 50000
               - endpoint:
                   address:
                     socket_address:
-                      address: 192.168.0.3
+                      address: 192.168.0.28
                       port_value: 50001
-              
+
         # transport_socket:
         #   name: envoy.transport_sockets.tls
         #   typed_config:

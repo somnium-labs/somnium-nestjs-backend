@@ -1,21 +1,2 @@
-jwt:
-  accessExpiration: 1d
-  refreshExpiration: 180d
-  secret: QVUri196zPlF2Re8mKaihOX2bS13P4c37N9IaLLptCcR6Q1tnwi59pubmqcV402eex5cHUB6Fw49EkTZXZ4CWg==
-
-rabbitmq:
-  user: admin
-  pass: admin
-
-redis:
-  cluster:
-    - host: localhost
-      port: 7001
-    - host: localhost
-      port: 7002
-    - host: localhost
-      port: 7003
-
-mongodb:
-  uri: mongodb://root:secret@192.168.0.67:27017
-  name: mobile
+service:
+  name: microservices-auth
