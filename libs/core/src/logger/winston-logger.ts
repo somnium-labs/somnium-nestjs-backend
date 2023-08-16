@@ -12,6 +12,10 @@ import { LoggerService } from '@nestjs/common';
 export function createWinstonLogger(
   configService: ConfigService,
 ): LoggerService {
+  const instance = process.env.NODE_APP_INSTANCE
+    ? parseInt(process.env.NODE_APP_INSTANCE)
+    : 0;
+
   return WinstonModule.createLogger({
     transports: [
       new winston.transports.Console({
@@ -21,7 +25,7 @@ export function createWinstonLogger(
             format: () => moment().format('YYYY-MM-DD HH:mm:ss'),
           }),
           nestWinstonModuleUtilities.format.nestLike(
-            configService.get('config.service.name'),
+            `${configService.get('config.service.name')}-${instance}`,
             {
               colors: true,
               prettyPrint: true,

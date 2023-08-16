@@ -1,5 +1,5 @@
 config:
-  target: 'http://192.168.0.67:3000'
+  target: 'http://192.168.0.67:10000'
   phases:
     - duration: 60
       arrivalRate: 100
@@ -8,8 +8,8 @@ scenarios:
   - flow:
       - loop:
           - post:
-            url: '/auth/kakao-authentication'
-            json:
-              idToken: 'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJhOWMzYTIzNTg5ODA0YjM4NzEyYTMwMGYyNmFkY2YwMiIsInN1YiI6IjI5NDQzODM3MDgiLCJhdXRoX3RpbWUiOjE2OTE4ODMyOTEsImlzcyI6Imh0dHBzOi8va2F1dGgua2FrYW8uY29tIiwiZXhwIjoxNjkxOTI2NDkxLCJpYXQiOjE2OTE4ODMyOTEsIm5vbmNlIjoiYmZkMzQwMDMtY2NiYi00Mjk2LWJhMGYtOTlhOGZhOWI4ZTM0In0.bQ_aWKTF_EX1lL-_7iCxtFGte1YJcBOTwdtaDyYtBMkMHpHgsyTwacVj6IPgZHY1_QkGSpmkcGYkdRI5pqqqNhV9ZbweeN9KF1Z0Pk4xr-chY39-XlTV58fzz_irfsm7fqFJelCozS0mopZYA75HvRRp9GSFnoKZ4Ar0LHK_EvxcEG2J55GGj7n0qf7Te47Iw35CFUL0_PPpTgUtQM2EbrvVJP3d7jkLciULZ3eLZG1si0Ei8bb0dAXVXTsBph60znGIbsN51XnglfCjmgJsZneh2F_hNjLdmI0xKE-EcqGZpPwSUbYqHd-y0r5Vhgvk-7kGe2gR5xz_0tjq_4hB2w'
-              nonce: 'bfd34003-ccbb-4296-ba0f-99a8fa9b8e34'
+              url: '/api/auth/kakao-authentication'
+              json:
+                idToken: 'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiJhOWMzYTIzNTg5ODA0YjM4NzEyYTMwMGYyNmFkY2YwMiIsInN1YiI6IjI5NDQzODM3MDgiLCJhdXRoX3RpbWUiOjE2OTIxMDM3MTEsImlzcyI6Imh0dHBzOi8va2F1dGgua2FrYW8uY29tIiwiZXhwIjoxNjkyMTQ2OTExLCJpYXQiOjE2OTIxMDM3MTEsIm5vbmNlIjoiYjUzYTZhMmEtOTJlYy00ODU3LThmYWYtMTkyNzEzZDJmMTdkIn0.PmoktYGpdfVnxKBHBHdw9Vs1hSHKSkiI86rJrgGAqY0vODR0Sg7xWxa7bP7ylzxWKuyzdM5jMoJVDZtlurKv3ty4Vp2zjvvYkyqOx1N-vLhAH0GELOlzPSpx-bcx5zFK7STS5Jt__aifHdSEyoV0l99Zzt2NyRYM1X3stH4nm-Fa8hTMg63rSC6oc87EyKOAKUdKCGPFb53cVRNgUGm3f6i3E0CiRq-LmDbFF2x7x9glHQ43gU8HBoZXq3rQz0UuLYR_COXqwhok6yC1Y-0CyXYx1LonPOKap4uIXAhybLkVE9edxIdA576aoqrADsHIKxx4qImJehymg1exYGr8BA'
+                nonce: 'b53a6a2a-92ec-4857-8faf-192713d2f17d'
         count: 25

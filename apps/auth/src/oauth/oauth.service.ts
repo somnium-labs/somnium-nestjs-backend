@@ -49,7 +49,6 @@ export class OAuthService {
   }
 
   async kakaoAuthentication(idToken: string, nonce: string) {
-    this.logger.log('kakaoAuthentication');
     const result = await this.kakaoLogin.verifyIdToken(idToken, nonce);
     const user = await this.findOrCreateUser(OAuthProvider.KAKAO, result);
     return this.generateJwt(user);
@@ -86,13 +85,20 @@ export class OAuthService {
     return this.generateJwt(user);
   }
 
+  async logout(userId: string) {
+    await this.userRepository.update(userId, {
+      currentRefreshToken: null,
+      currentRefreshTokenExp: null,
+    });
+  }
+
   /**
    * JWT 토큰 생성
    *
    * @param user
    * @returns
    */
-  async generateJwt(user: User) {
+  private async generateJwt(user: User) {
     const accessToken = await this.jwtService.signAsync(
       instanceToPlain({
         id: user.id,

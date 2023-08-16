@@ -1,20 +1,24 @@
 import * as grpc from '@grpc/grpc-js';
 
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import {
+  ClientProvider,
+  ClientsModule,
+  Transport,
+} from '@nestjs/microservices';
 import { Global, Module } from '@nestjs/common';
 
 import { AuthController } from '@api-gateway/auth/auth.controller';
+import { ConfigService } from '@nestjs/config';
+import { JwtStrategy } from './jwt/jwt.strategy';
 import { join } from 'path';
 import { protobufPackage } from 'proto/auth';
 
-//192.168.0.67:10000
 @Global()
 @Module({
   imports: [
     ClientsModule.registerAsync([
       {
-        name: 'GRPC_AUTH',
+        name: 'GRPC_CLIENT',
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => ({
           transport: Transport.GRPC,
@@ -29,45 +33,36 @@ import { protobufPackage } from 'proto/auth';
     ]),
     ClientsModule.registerAsync([
       {
-        name: 'RMQ_AUTH',
-        imports: [ConfigModule],
+        name: 'RMQ_CLIENT',
         inject: [ConfigService],
-        useFactory: (configService: ConfigService) => {
-          const user = configService.get('config.rabbitmq.user');
-          const pass = configService.get('config.rabbitmq.pass');
-          return {
-            transport: Transport.RMQ,
-            options: {
-              urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
-              queue: 'tasks',
-              queueOptions: {
-                durable: false, // 메세지를 메모리에 저장
-              },
-            },
-          };
-        },
-      },
-      {
-        name: 'RMQ_AUTH2',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => {
-          const user = configService.get('config.rabbitmq.user');
-          const pass = configService.get('config.rabbitmq.pass');
-          return {
-            transport: Transport.RMQ,
-            options: {
-              urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
-              queue: 'tasks2',
-              queueOptions: {
-                durable: false, // 메세지를 메모리에 저장
-              },
-            },
-          };
-        },
+        useFactory: (configService: ConfigService) =>
+          createRabbitMQ(configService, 'auth'),
       },
     ]),
   ],
   controllers: [AuthController],
+  providers: [JwtStrategy],
 })
 export class AuthModule {}
+
+function createRabbitMQ(
+  configService: ConfigService,
+  queue: string,
+): ClientProvider {
+  const user = configService.get<string>('config.rabbitmq.user');
+  const pass = configService.get<string>('config.rabbitmq.pass');
+  const cluster = configService.get<{ host: string; port: number }[]>(
+    'config.rabbitmq.cluster',
+  );
+  const urls = cluster.map(
+    (cluster) => `amqp://${user}:${pass}@${cluster.host}:${cluster.port}`,
+  );
+  return {
+    transport: Transport.RMQ,
+    options: {
+      urls: urls,
+      queue: queue,
+      queueOptions: { durable: false },
+    },
+  };
+}

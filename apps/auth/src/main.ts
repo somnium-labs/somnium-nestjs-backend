@@ -28,8 +28,8 @@ async function bootstrap() {
       ? parseInt(process.env.NODE_APP_INSTANCE)
       : 0);
 
-  // logger.log(`current port: ${currentPort}`);
-  // logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
+  logger.log(`current port: ${currentPort}`);
+  logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
 
   // microservice #GRPC
   app.connectMicroservice<MicroserviceOptions>({
@@ -47,15 +47,21 @@ async function bootstrap() {
 
   const user = configService.get('config.rabbitmq.user');
   const pass = configService.get('config.rabbitmq.pass');
+  const cluster = configService.get<{ host: string; port: number }[]>(
+    'config.rabbitmq.cluster',
+  );
+  const urls = cluster.map(
+    (cluster) => `amqp://${user}:${pass}@${cluster.host}:${cluster.port}`,
+  );
 
   // microservice #RMQ
   for (const queue of ['auth']) {
     app.connectMicroservice<RmqOptions>({
       transport: Transport.RMQ,
       options: {
-        urls: [`amqp://${user}:${pass}@192.168.0.67:5672`],
+        urls: urls,
         queue: queue,
-        noAck: false, // 수동 승인 모드
+        // noAck: false, // 수동 승인 모드
         queueOptions: {
           durable: false,
         },

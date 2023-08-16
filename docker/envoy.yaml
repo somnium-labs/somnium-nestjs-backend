@@ -106,6 +106,31 @@ static_resources:
               - endpoint:
                   address:
                     socket_address:
+                      address: 192.168.0.67
+                      port_value: 50002
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.67
+                      port_value: 50003
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.67
+                      port_value: 50004
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.67
+                      port_value: 50005
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: 192.168.0.67
+                      port_value: 50006
+              - endpoint:
+                  address:
+                    socket_address:
                       address: 192.168.0.28
                       port_value: 50000
               - endpoint:

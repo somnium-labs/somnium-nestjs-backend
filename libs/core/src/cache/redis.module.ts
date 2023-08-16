@@ -1,9 +1,10 @@
-import { Global, Module } from '@nestjs/common';
 import {
   ClusterModule,
   DEFAULT_CLUSTER_NAMESPACE,
 } from '@liaoliaots/nestjs-redis';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Global, Module } from '@nestjs/common';
+
 import { ClusterNode } from 'ioredis';
 import { RedisService } from '@core/cache/redis.service';
 

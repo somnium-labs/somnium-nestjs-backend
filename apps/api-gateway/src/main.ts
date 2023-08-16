@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { SlackService } from 'nestjs-slack';
 import { createWinstonLogger } from '@core/logger/winston-logger';
 
 async function bootstrap() {
@@ -20,6 +21,17 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   setupSwagger(app);
+
+  process.on('unhandledRejection', (reason, promise) => {
+    logger.error('Unhandled Promise Rejection:', reason);
+  });
+
+  process.on('uncaughtException', (error) => {
+    const slackService = app.get(SlackService);
+    slackService.sendText(`😡${error.toString()}`, { channel: 'notification' });
+    logger.error('Uncaught Exception:', error);
+  });
+
   await app.listen(configService.get('config.server.port'));
 
   logger.log(`Application is running on: ${await app.getUrl()}`);

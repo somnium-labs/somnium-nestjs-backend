@@ -12,7 +12,7 @@ module.exports = {
     {
       name: 'auth',
       script: 'dist/apps/auth/main.js',
-      instances: 2,
+      instances: 6,
       exec_mode: 'cluster',
       env: {
         NODE_ENV: 'dev',

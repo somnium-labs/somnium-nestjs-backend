@@ -22,7 +22,7 @@ services:
       --cluster-config-file nodes.conf 
       --cluster-node-timeout 5000 
       --appendonly yes 
-      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-ip dev.somniumlabs.net 
       --cluster-announce-port 7001 
       --cluster-announce-bus-port 17001
     volumes:
@@ -39,7 +39,7 @@ services:
       --cluster-config-file nodes.conf 
       --cluster-node-timeout 5000 
       --appendonly yes 
-      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-ip dev.somniumlabs.net 
       --cluster-announce-port 7002 
       --cluster-announce-bus-port 17002
     volumes:
@@ -56,7 +56,7 @@ services:
       --cluster-config-file nodes.conf 
       --cluster-node-timeout 5000 
       --appendonly yes 
-      --cluster-announce-ip somniumlabs.net 
+      --cluster-announce-ip dev.somniumlabs.net 
       --cluster-announce-port 7003 
       --cluster-announce-bus-port 17003
     volumes:

@@ -9,8 +9,15 @@ import {
 } from 'proto/auth';
 
 import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import {
+  Ctx,
+  GrpcMethod,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 import { OAuthService } from './oauth.service';
+import { ContextUser } from '@api-gateway/auth/jwt/context.user';
 
 @Controller()
 export class OAuthController {
@@ -59,15 +66,8 @@ export class OAuthController {
     );
   }
 
-  // @MessagePattern('rabbitmq')
-  // async rabbitmq(@Payload() data: string, @Ctx() context: RmqContext) {
-  //   console.log(data);
-  //
-  //   // 수동 승인
-  //   const channel = context.getChannelRef();
-  //   const originalMsg = context.getMessage();
-  //   channel.ack(originalMsg);
-  //
-  //   return 'success';
-  // }
+  @MessagePattern('logout')
+  async rabbitmq(@Payload() user: ContextUser, @Ctx() context: RmqContext) {
+    await this.oauthService.logout(user.id);
+  }
 }
