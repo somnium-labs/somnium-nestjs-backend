@@ -50,3 +50,17 @@ for lib in ./libs/*; do
     fi
   fi
 done
+
+
+for app in ./apps/*; do
+  if [ -d "$app" ]; then
+    app_name=$(basename "$app")
+    if should_exclude_folder "$app_name" "$excluded_folder"; then
+      echo "Skipping excluded folder: $app_name"
+    else
+      docker stop "$app_name"
+      docker rmi "somniumlabs/$app_name:latest"
+      docker build -t "somniumlabs/$app_name:latest" -f "apps/$app_name/Dockerfile" .
+    fi
+  fi
+done
