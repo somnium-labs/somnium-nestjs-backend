@@ -8,9 +8,10 @@ export enum OAuthProvider {
 }
 
 export enum UserStatus {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  BLOCKED = 'blocked',
+  BEFORE_SIGNING_UP = 'before_signing_up',
+  DEFAULT = 'default',
+  DEACTIVATED = 'deactivated',
+  WITHDRAWN = 'withdrawn',
   DELETED = 'deleted',
 }
 

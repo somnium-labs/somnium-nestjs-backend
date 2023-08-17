@@ -157,7 +157,7 @@ export class OAuthService {
           provider: provider,
           userId: result.userId,
           email: result.email,
-          userStatus: UserStatus.INACTIVE,
+          userStatus: UserStatus.BEFORE_SIGNING_UP,
         }),
       );
     }

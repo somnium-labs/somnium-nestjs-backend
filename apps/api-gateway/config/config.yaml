@@ -5,4 +5,4 @@ server:
   port: 3000
 
 grpc:
-  auth: 192.168.0.67:10000
+  auth: dev.somniumlabs.net:10000

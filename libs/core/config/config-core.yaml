@@ -1,12 +1,12 @@
 mongodb:
-  uri: mongodb://root:secret@192.168.0.67:27017
+  uri: mongodb://root:secret@dev.somniumlabs.net:27017
   name: mobile
 
 rabbitmq:
   user: admin
   pass: admin
   cluster:
-    - host: 192.168.0.67
+    - host: dev.somniumlabs.net
       port: 5672
 
 redis:
@@ -19,7 +19,7 @@ redis:
       port: 7003
 
 elasticsearch:
-  host: https://127.0.0.1:9200
+  host: https://dev.somniumlabs.net:9200
   username: elastic
   password: 0dim3F8r0T0yNfu-e-PN
 

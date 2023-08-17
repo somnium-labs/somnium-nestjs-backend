@@ -1,5 +1,5 @@
 config:
-  target: 'http://192.168.0.67:10000'
+  target: 'http://dev.somniumlabs.net:10000'
   phases:
     - duration: 60
       arrivalRate: 100

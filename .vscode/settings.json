@@ -1,6 +1,12 @@
 {
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
-  },
-  "editor.formatOnSave": true
+    "source.organizeImports": true
+  }
 }
