@@ -66,6 +66,7 @@ export class AuthController implements OnModuleInit {
   async kakaoAuthentication(
     @Body() dto: KakaoAuthRequestDto,
   ): Promise<AuthResponseDto> {
+    this.logger.log('카카오 인증');
     return await this.authGrpcClient.kakaoLogin({
       idToken: dto.idToken,
       nonce: dto.nonce,

@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: grpc-load-balancing
+  namespace: default
+spec:
+  host: auth.default.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: DISABLE
+    loadBalancer:
+      simple: ROUND_ROBIN
+    # connectionPool:
+    #   http:
+    #     http2MaxRequests: 1024
+    #     maxRequestsPerConnection: 10

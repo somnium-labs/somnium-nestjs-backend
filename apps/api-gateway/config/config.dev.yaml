@@ -1,0 +1,8 @@
+service:
+  name: api-gateway
+
+server:
+  port: 3000
+
+grpc:
+  auth: auth.default.svc.cluster.local:50000

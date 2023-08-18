@@ -8,7 +8,8 @@ import {
   TwitterAuthRequest,
 } from 'proto/auth';
 
-import { Controller } from '@nestjs/common';
+import { ContextUser } from '@api-gateway/auth/jwt/context.user';
+import { Controller, Logger } from '@nestjs/common';
 import {
   Ctx,
   GrpcMethod,
@@ -17,11 +18,13 @@ import {
   RmqContext,
 } from '@nestjs/microservices';
 import { OAuthService } from './oauth.service';
-import { ContextUser } from '@api-gateway/auth/jwt/context.user';
 
 @Controller()
 export class OAuthController {
-  constructor(private readonly oauthService: OAuthService) {}
+  constructor(
+    private readonly logger: Logger,
+    private readonly oauthService: OAuthService,
+  ) {}
 
   @GrpcMethod('AuthService', 'googleLogin')
   async googleLogin(request: GoogleAuthRequest): Promise<AuthResponse> {
@@ -33,6 +36,7 @@ export class OAuthController {
 
   @GrpcMethod('AuthService', 'kakaoLogin')
   async kakaoLogin(request: KakaoAuthRequest): Promise<AuthResponse> {
+    this.logger.log('카카오 인증');
     return await this.oauthService.kakaoAuthentication(
       request.idToken,
       request.nonce,

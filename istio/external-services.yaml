@@ -1,0 +1,24 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: external-services
+spec:
+  hosts:
+  - dev.somniumlabs.net
+  ports:
+  - number: 5672
+    name: amqp
+    protocol: TCP
+  - number: 7001
+    name: redis-7001
+    protocol: TCP
+  - number: 7002
+    name: redis-7002
+    protocol: TCP
+  - number: 7003
+    name: redis-7003
+    protocol: TCP
+  - number: 27017
+    name: mongodb
+    protocol: TCP
+  location: MESH_EXTERNAL

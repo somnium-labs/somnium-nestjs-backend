@@ -58,9 +58,15 @@ for app in ./apps/*; do
     if should_exclude_folder "$app_name" "$excluded_folder"; then
       echo "Skipping excluded folder: $app_name"
     else
+      echo "Building docker image for $app_name"
       docker stop "$app_name"
       docker rmi "somniumlabs/$app_name:latest"
       docker build -t "somniumlabs/$app_name:latest" -f "apps/$app_name/Dockerfile" .
+      docker tag somniumlabs/$app_name:latest public.ecr.aws/b5d3j6b0/$app_name:latest
+      docker push public.ecr.aws/b5d3j6b0/$app_name:latest
     fi
   fi
 done
+
+# Remove dangling images (tag: <none>)
+docker rmi $(docker images -f "dangling=true" -q)

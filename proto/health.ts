@@ -1,9 +1,12 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
 
 export const protobufPackage = "grpc.health.v1";
 
 export interface HealthCheckRequest {
+  service: string;
 }
 
 export interface HealthCheckResponse {
@@ -14,6 +17,8 @@ export enum HealthCheckResponse_ServingStatus {
   UNKNOWN = 0,
   SERVING = 1,
   NOT_SERVING = 2,
+  /** SERVICE_UNKNOWN - Used only by the Watch method. */
+  SERVICE_UNKNOWN = 3,
   UNRECOGNIZED = -1,
 }
 
@@ -28,6 +33,9 @@ export function healthCheckResponse_ServingStatusFromJSON(object: any): HealthCh
     case 2:
     case "NOT_SERVING":
       return HealthCheckResponse_ServingStatus.NOT_SERVING;
+    case 3:
+    case "SERVICE_UNKNOWN":
+      return HealthCheckResponse_ServingStatus.SERVICE_UNKNOWN;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -43,6 +51,8 @@ export function healthCheckResponse_ServingStatusToJSON(object: HealthCheckRespo
       return "SERVING";
     case HealthCheckResponse_ServingStatus.NOT_SERVING:
       return "NOT_SERVING";
+    case HealthCheckResponse_ServingStatus.SERVICE_UNKNOWN:
+      return "SERVICE_UNKNOWN";
     case HealthCheckResponse_ServingStatus.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
@@ -50,11 +60,14 @@ export function healthCheckResponse_ServingStatusToJSON(object: HealthCheckRespo
 }
 
 function createBaseHealthCheckRequest(): HealthCheckRequest {
-  return {};
+  return { service: "" };
 }
 
 export const HealthCheckRequest = {
-  encode(_: HealthCheckRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(message: HealthCheckRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.service !== "") {
+      writer.uint32(10).string(message.service);
+    }
     return writer;
   },
 
@@ -65,6 +78,13 @@ export const HealthCheckRequest = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.service = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -74,20 +94,24 @@ export const HealthCheckRequest = {
     return message;
   },
 
-  fromJSON(_: any): HealthCheckRequest {
-    return {};
+  fromJSON(object: any): HealthCheckRequest {
+    return { service: isSet(object.service) ? String(object.service) : "" };
   },
 
-  toJSON(_: HealthCheckRequest): unknown {
+  toJSON(message: HealthCheckRequest): unknown {
     const obj: any = {};
+    if (message.service !== "") {
+      obj.service = message.service;
+    }
     return obj;
   },
 
   create<I extends Exact<DeepPartial<HealthCheckRequest>, I>>(base?: I): HealthCheckRequest {
     return HealthCheckRequest.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<HealthCheckRequest>, I>>(_: I): HealthCheckRequest {
+  fromPartial<I extends Exact<DeepPartial<HealthCheckRequest>, I>>(object: I): HealthCheckRequest {
     const message = createBaseHealthCheckRequest();
+    message.service = object.service ?? "";
     return message;
   },
 };
@@ -151,6 +175,7 @@ export const HealthCheckResponse = {
 
 export interface Health {
   Check(request: HealthCheckRequest): Promise<HealthCheckResponse>;
+  Watch(request: HealthCheckRequest): Observable<HealthCheckResponse>;
 }
 
 export const HealthServiceName = "grpc.health.v1.Health";
@@ -161,16 +186,26 @@ export class HealthClientImpl implements Health {
     this.service = opts?.service || HealthServiceName;
     this.rpc = rpc;
     this.Check = this.Check.bind(this);
+    this.Watch = this.Watch.bind(this);
   }
   Check(request: HealthCheckRequest): Promise<HealthCheckResponse> {
     const data = HealthCheckRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Check", data);
     return promise.then((data) => HealthCheckResponse.decode(_m0.Reader.create(data)));
   }
+
+  Watch(request: HealthCheckRequest): Observable<HealthCheckResponse> {
+    const data = HealthCheckRequest.encode(request).finish();
+    const result = this.rpc.serverStreamingRequest(this.service, "Watch", data);
+    return result.pipe(map((data) => HealthCheckResponse.decode(_m0.Reader.create(data))));
+  }
 }
 
 interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  clientStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Promise<Uint8Array>;
+  serverStreamingRequest(service: string, method: string, data: Uint8Array): Observable<Uint8Array>;
+  bidirectionalStreamingRequest(service: string, method: string, data: Observable<Uint8Array>): Observable<Uint8Array>;
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
