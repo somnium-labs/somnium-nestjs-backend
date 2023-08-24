@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "compounds": [
     {
-      "name": "All",
+      "name": "Debug All",
       "configurations": ["API Gateway", "Auth Service"],
       "stopAll": true
     }
@@ -16,7 +16,8 @@
       "runtimeArgs": ["run-script", "start:api-gateway:debug"],
       "restart": true,
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen"
+      "internalConsoleOptions": "neverOpen",
+      "preLaunchTask": "nestBuildCore"
     },
     {
       "type": "node",

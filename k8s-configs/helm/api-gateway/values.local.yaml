@@ -1,0 +1,47 @@
+replicaCount: 2
+image:
+  repository: 192.168.0.67:5000/api-gateway
+  pullPolicy: Always
+  tag: '0.0.14'
+imagePullSecrets: []
+nameOverride: ''
+fullnameOverride: ''
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ''
+podAnnotations:
+  sidecar.istio.io/rewriteAppHTTPProbers: 'true'
+podSecurityContext: {}
+securityContext: {}
+service:
+  type: LoadBalancer
+  port: 8080
+ingress:
+  enabled: false
+  className: ''
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+resources: {}
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+nodeSelector:
+  app: enabled
+tolerations: []
+affinity: {}
+livenessProbe:
+  httpGet:
+    path: /api/health
+    port: 8080
+readinessProbe:
+  httpGet:
+    path: /api/health
+    port: 8080

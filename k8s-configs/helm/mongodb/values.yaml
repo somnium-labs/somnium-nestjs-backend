@@ -1,0 +1,33 @@
+# helm install mongodb oci://registry-1.docker.io/bitnamicharts/mongodb -f k8s-configs/helm/mongodb/values.yaml
+
+image:
+  registry: docker.io
+  repository: mongo
+  tag: 7.0.0
+
+architecture: standalone
+
+# not working
+# auth:
+#   enabled: true
+#   rootPassword: root
+#   username: user
+#   password: user
+#   database: mobile
+
+persistence:
+  mountPath: /data/db
+
+# readinessProbe:
+#   enabled: false
+# livenessProbe:
+#   enabled: false
+
+service:
+  type: LoadBalancer
+  nameOverride: mongodb-svc
+  ports:
+    mongodb: 27017
+# install 완료 후 kubectl exec -it [pod name] -c mongodb -- /bin/sh
+# use admin
+# db.createUser({user:"root",pwd:"root",roles:[{role:"root",db:"admin"}]})

@@ -1,25 +1,24 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
-import { GoogleLogin } from './usecase/google.strategy';
-import { ConfigService } from '@nestjs/config';
-import { InjectCluster } from '@liaoliaots/nestjs-redis';
-import { Cluster } from 'ioredis';
-import { AuthType, OAuthProvider, UserStatus } from './oauth.enum';
 import { instanceToPlain, plainToClass } from 'class-transformer';
+import { AuthType, OAuthProvider, UserStatus } from './oauth.enum';
+
+import { convertTimeToMilliseconds } from '@core/utility';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { AuthResponse } from 'proto/auth';
 import { UserRepository } from '../user/user.repository';
 import { User } from '../user/user.schema';
-import { JwtService } from '@nestjs/jwt';
-import { convertTimeToMilliseconds } from '@core/utility';
 import { AppleLogin } from './usecase/apple.strategy';
 import { FacebookLogin } from './usecase/facebook.strategy';
-import { LineLogin } from './usecase/line.strategy';
+import { GoogleLogin } from './usecase/google.strategy';
 import { KakaoLogin } from './usecase/kakao.strategy';
+import { LineLogin } from './usecase/line.strategy';
 import { TwitterLogin } from './usecase/twitter.strategy';
-import { AuthResponse } from 'proto/auth';
 
 @Injectable()
 export class OAuthService {
   constructor(
-    @InjectCluster() readonly redisCluster: Cluster,
+    // @InjectCluster() readonly redisCluster: Cluster,
     private readonly jwtService: JwtService,
     private readonly userRepository: UserRepository,
     private readonly logger: Logger,

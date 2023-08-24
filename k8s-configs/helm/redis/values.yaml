@@ -1,0 +1,13 @@
+# helm install redis bitnami/redis -f k8s-configs/helm/redis/values.yaml
+architecture: standalone
+
+auth:
+  enabled: false
+  sentinel: false
+  password: ''
+
+master:
+  service:
+    type: LoadBalancer
+    port: 6379
+    name: redis-cluster

@@ -11,7 +11,7 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY ../../dist/proto dist/proto
 COPY ../../dist/libs dist/libs
 COPY ../../dist/apps/auth dist/apps/auth
-EXPOSE 50000-50010
-CMD ["sh", "-c", "NODE_ENV=dev node dist/apps/auth/main.js"]
+EXPOSE 50000
+CMD ["sh", "-c", "NODE_ENV=local node dist/apps/auth/main.js"]
 
 

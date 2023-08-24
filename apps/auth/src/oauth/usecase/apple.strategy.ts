@@ -1,22 +1,23 @@
-import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import * as jose from 'jose';
-import { RedisService } from '@core/cache/redis.service';
-import { Cluster } from 'ioredis';
+
+import { Injectable, Logger } from '@nestjs/common';
+
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { Redis } from 'ioredis';
 
 @Injectable()
 export class AppleLogin {
   private readonly issuer: string = 'https://appleid.apple.com';
-  private readonly redisCluster: Cluster;
+  private readonly redisCluster: Redis;
 
   constructor(
     private readonly logger: Logger,
     private readonly configService: ConfigService,
-    private readonly redisService: RedisService,
+    // private readonly redisService: RedisService,
     private readonly httpService: HttpService,
   ) {
-    this.redisCluster = redisService.cluster;
+    // this.redisCluster = redisService.node;
   }
 
   async verifyIdToken(idToken: string, nonce: string, audience: string) {

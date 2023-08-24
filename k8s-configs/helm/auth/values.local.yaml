@@ -1,19 +1,12 @@
-# Default values for auth.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
 replicaCount: 2
-
 image:
-  repository: public.ecr.aws/b5d3j6b0/auth
+  repository: 192.168.0.67:5000/auth
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
-
+  tag: 0.0.14
 imagePullSecrets: []
 nameOverride: ''
 fullnameOverride: ''
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -22,37 +15,31 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ''
-
 podAnnotations:
   sidecar.istio.io/rewriteAppHTTPProbers: 'true'
   # sidecar.istio.io/statusPort: '15020'
   # sidecar.istio.io/inject: 'false'
+podSecurityContext: {}
+# fsGroup: 2000
 
-podSecurityContext:
-  {}
-  # fsGroup: 2000
-
-securityContext:
-  {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+securityContext: {}
+# capabilities:
+#   drop:
+#   - ALL
+# readOnlyRootFilesystem: true
+# runAsNonRoot: true
+# runAsUser: 1000
 
 service:
   type: ClusterIP
   port: 50000
   name: grpc
-
 ingress:
   enabled: false
   className: ''
-  annotations:
-    {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
+  annotations: {}
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
   hosts:
     - host: chart-example.local
       paths:
@@ -62,19 +49,17 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-
-resources:
-  {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources: {}
+# We usually recommend not to specify default resources and to leave this as a conscious
+# choice for the user. This also increases chances charts run on environments with little
+# resources, such as Minikube. If you do want to specify resources, uncomment the following
+# lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+# limits:
+#   cpu: 100m
+#   memory: 128Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
 
 autoscaling:
   enabled: false
@@ -82,14 +67,10 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
-
 nodeSelector:
   app: enabled
-
 tolerations: []
-
 affinity: {}
-
 livenessProbe: {}
 readinessProbe:
   grpc:

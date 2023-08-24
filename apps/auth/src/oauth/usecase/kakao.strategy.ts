@@ -1,26 +1,29 @@
 import * as jose from 'jose';
 
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Cluster, Redis } from 'ioredis';
 
-import { Cluster } from 'ioredis';
-import { ConfigService } from '@nestjs/config';
+import { RedisClusterService } from '@core/cache/redis-cluster.service';
+import { RedisStandAloneService } from '@core/cache/redis-standalone.service';
 import { HttpService } from '@nestjs/axios';
-import { RedisService } from '@core/cache/redis.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class KakaoLogin {
   private readonly issuer: string = 'https://kauth.kakao.com';
   private readonly audience: string;
-  private readonly redisCluster: Cluster;
+  private readonly redis: Redis | Cluster;
 
   constructor(
+    @Inject('REDIS_SERVICE')
+    redisService: RedisStandAloneService | RedisClusterService,
     private readonly logger: Logger,
     private readonly configService: ConfigService,
-    private readonly redisService: RedisService,
+
     private readonly httpService: HttpService,
   ) {
     this.audience = this.configService.get('config.oauth.kakao.appKey');
-    this.redisCluster = redisService.cluster;
+    this.redis = redisService.node;
   }
 
   async verifyIdToken(idToken: string, nonce: string) {
@@ -64,7 +67,7 @@ export class KakaoLogin {
    * @returns jwk
    */
   private async getJwkFromCacheOrFetch(kid: string): Promise<any> {
-    let jwks = await this.redisCluster.smembers('kakao-jwks');
+    let jwks = await this.redis.smembers('kakao-jwks');
     let jwk = jwks.find((jwk: any) => JSON.parse(jwk).kid === kid);
     if (jwks.length === 0 || !jwk) {
       const response = await this.httpService.axiosRef.get(
@@ -75,8 +78,8 @@ export class KakaoLogin {
       );
       jwk = jwks.find((jwk: any) => JSON.parse(jwk).kid === kid);
 
-      await this.redisCluster.sadd('kakao-jwks', ...jwks);
-      await this.redisCluster.expire('kakao-jwks', 86400 * 7);
+      await this.redis.sadd('kakao-jwks', ...jwks);
+      await this.redis.expire('kakao-jwks', 86400 * 7);
     }
     return JSON.parse(jwk);
   }

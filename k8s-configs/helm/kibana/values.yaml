@@ -1,0 +1,21 @@
+# helm install kibana oci://registry-1.docker.io/bitnamicharts/kibana -f k8s-configs/helm/elasticsearch/values.yaml
+
+elasticsearch:
+  hosts:
+    - elasticsearch.default.svc.cluster.local
+  port: 9200
+
+security:
+  auth:
+    enabled: true
+    kibanaPassword: secret
+
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+
+service:
+  type: LoadBalancer
+  ports:
+    http: 5601

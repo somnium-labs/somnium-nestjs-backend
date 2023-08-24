@@ -5,4 +5,4 @@ server:
   port: 3000
 
 grpc:
-  auth: auth.default.svc.cluster.local:50000
+  auth: localhost:50000

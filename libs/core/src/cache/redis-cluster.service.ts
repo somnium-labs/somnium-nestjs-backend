@@ -3,6 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { Cluster } from 'ioredis';
 
 @Injectable()
-export class RedisService {
-  constructor(@InjectCluster() readonly cluster: Cluster) {}
+export class RedisClusterService {
+  constructor(@InjectCluster() readonly node: Cluster) {}
 }

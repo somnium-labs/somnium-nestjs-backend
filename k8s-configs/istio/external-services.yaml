@@ -5,6 +5,7 @@ metadata:
 spec:
   hosts:
   - dev.somniumlabs.net
+  - hooks.slack.com
   ports:
   - number: 5672
     name: amqp
@@ -21,4 +22,7 @@ spec:
   - number: 27017
     name: mongodb
     protocol: TCP
+  - number: 443
+    name: https-slack
+    protocol: HTTPS
   location: MESH_EXTERNAL

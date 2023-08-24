@@ -1,0 +1,25 @@
+# helm install rabbitmq oci://registry-1.docker.io/bitnamicharts/rabbitmq -f k8s-configs/helm/rabbitmq/values.yaml
+
+replicaCount: 3
+
+auth:
+  username: admin
+  password: admin
+  erlangCookie: secret
+
+service:
+  type: LoadBalancer
+  ports:
+    amqp: 5672
+    amqpTls: 5671
+    dist: 25672
+    manager: 15672
+    metrics: 9419
+    epmd: 4369
+  portNames:
+    amqp: 'amqp'
+    amqpTls: 'amqp-tls'
+    dist: 'dist'
+    manager: 'http-stats'
+    metrics: 'metrics'
+    epmd: 'epmd'

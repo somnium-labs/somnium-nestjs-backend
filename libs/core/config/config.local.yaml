@@ -1,0 +1,14 @@
+mongodb:
+  uri: mongodb://root:root@mongodb-svc.default.svc.cluster.local:27017
+  name: mobile
+
+rabbitmq:
+  user: admin
+  pass: admin
+  cluster:
+    - host: rabbitmq.default.svc.cluster.local
+      port: 5672
+
+redis:
+  host: redis-master.default.svc.cluster.local
+  port: 6379

@@ -11,5 +11,5 @@ COPY --from=builder /usr/src/app/node_modules ./node_modules
 COPY ../../dist/proto dist/proto
 COPY ../../dist/libs dist/libs
 COPY ../../dist/apps/api-gateway dist/apps/api-gateway
-EXPOSE 3000
-CMD ["sh", "-c", "NODE_ENV=dev node dist/apps/api-gateway/main.js"]
+EXPOSE 8080
+CMD ["sh", "-c", "NODE_ENV=local node dist/apps/api-gateway/main.js"]

@@ -1,12 +1,12 @@
 mongodb:
-  uri: mongodb://root:secret@dev.somniumlabs.net:27017
+  uri: mongodb://root:root@mongodb-svc.default.svc.cluster.local:27017
   name: mobile
 
 rabbitmq:
   user: admin
   pass: admin
   cluster:
-    - host: dev.somniumlabs.net
+    - host: rabbitmq.default.svc.cluster.local
       port: 5672
 
 redis:
@@ -21,7 +21,7 @@ redis:
 elasticsearch:
   host: https://dev.somniumlabs.net:9200
   username: elastic
-  password: 0dim3F8r0T0yNfu-e-PN
+  password: z6evEs60vZLGWOEbhjSt
 
 slack:
   token: xoxb-5697890324212-5725328248161-c3xZTfHwdDckB535fpYGK5ZD

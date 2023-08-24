@@ -2,7 +2,7 @@ service:
   name: api-gateway
 
 server:
-  port: 3000
+  port: 8080
 
 grpc:
-  auth: dev.somniumlabs.net:10000
+  auth: auth.default.svc.cluster.local:50000

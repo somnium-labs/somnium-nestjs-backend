@@ -7,15 +7,12 @@ import {
 } from 'nest-winston';
 
 import { ConfigService } from '@nestjs/config';
+import { ElasticsearchTransport } from 'winston-elasticsearch';
 import { LoggerService } from '@nestjs/common';
 
 export function createWinstonLogger(
   configService: ConfigService,
 ): LoggerService {
-  const instance = process.env.NODE_APP_INSTANCE
-    ? parseInt(process.env.NODE_APP_INSTANCE)
-    : 0;
-
   return WinstonModule.createLogger({
     transports: [
       new winston.transports.Console({
@@ -25,7 +22,7 @@ export function createWinstonLogger(
             format: () => moment().format('YYYY-MM-DD HH:mm:ss'),
           }),
           nestWinstonModuleUtilities.format.nestLike(
-            `${configService.get('config.service.name')}-${instance}`,
+            `${configService.get('config.service.name')}`,
             {
               colors: true,
               prettyPrint: true,
@@ -33,18 +30,18 @@ export function createWinstonLogger(
           ),
         ),
       }),
-      // new ElasticsearchTransport({
-      //   level: process.env.NODE_ENV === 'prod' ? 'info' : 'silly',
-      //   index: 'somnium-project',
-      //   clientOpts: {
-      //     node: configService.get('config.elasticsearch.host'),
-      //     auth: {
-      //       username: configService.get('config.elasticsearch.username'),
-      //       password: configService.get('config.elasticsearch.password'),
-      //     },
-      //     tls: { rejectUnauthorized: false },
-      //   },
-      // }),
+      new ElasticsearchTransport({
+        level: process.env.NODE_ENV === 'prod' ? 'info' : 'silly',
+        index: `${configService.get('config.service.name')}`,
+        clientOpts: {
+          node: configService.get('config.elasticsearch.host'),
+          // auth: {
+          //   username: configService.get('config.elasticsearch.username'),
+          //   password: configService.get('config.elasticsearch.password'),
+          // },
+          tls: { rejectUnauthorized: false },
+        },
+      }),
     ],
   });
 }

@@ -72,6 +72,14 @@ export class OAuthController {
 
   @MessagePattern('logout')
   async rabbitmq(@Payload() user: ContextUser, @Ctx() context: RmqContext) {
-    await this.oauthService.logout(user.id);
+    // send의 경우 리턴 값이 있어야 함
+    // emit의 경우 없어도 됨
+    try {
+      await this.oauthService.logout(user.id);
+      return true; // send 응답
+    } catch (error) {
+      this.logger.error(error);
+      return false;
+    }
   }
 }

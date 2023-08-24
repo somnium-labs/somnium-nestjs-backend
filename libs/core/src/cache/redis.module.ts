@@ -1,33 +1,54 @@
-import {
-  ClusterModule,
-  DEFAULT_CLUSTER_NAMESPACE,
-} from '@liaoliaots/nestjs-redis';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Global, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module } from '@nestjs/common';
 
-import { ClusterNode } from 'ioredis';
-import { RedisService } from '@core/cache/redis.service';
+import { RedisClusterModule } from './redis-cluster.module';
+import { RedisClusterService } from './redis-cluster.service';
+import { RedisStandAloneModule } from './redis-standalone.module';
+import { RedisStandAloneService } from './redis-standalone.service';
 
 @Global()
 @Module({
-  imports: [
-    ClusterModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const nodes = configService.get<ClusterNode[]>('config.redis.cluster');
-        return {
-          config: [
-            {
-              namespace: DEFAULT_CLUSTER_NAMESPACE,
-              nodes: nodes,
-            },
-          ],
-        };
-      },
-    }),
-  ],
-  providers: [RedisService],
-  exports: [RedisService],
+  imports: [...RedisModule.getClusterOrStandAloneModule()],
+  providers: [...RedisModule.getProviders()],
+  exports: ['REDIS_SERVICE'],
 })
-export class RedisModule {}
+export class RedisModule {
+  static getClusterOrStandAloneModule(): DynamicModule[] {
+    if (process.env.NODE_ENV === 'debug' || process.env.NODE_ENV === 'local') {
+      return [
+        {
+          module: RedisStandAloneModule,
+          imports: [RedisStandAloneModule],
+        },
+      ];
+    }
+    return [
+      {
+        module: RedisClusterModule,
+        imports: [RedisClusterModule],
+      },
+    ];
+  }
+
+  static getProviders(): any[] {
+    if (process.env.NODE_ENV === 'debug' || process.env.NODE_ENV === 'local') {
+      return [
+        {
+          provide: 'REDIS_SERVICE',
+          useFactory: (redisStandAloneService: RedisStandAloneService) => {
+            return redisStandAloneService;
+          },
+          inject: [RedisStandAloneService],
+        },
+      ];
+    }
+    return [
+      {
+        provide: 'REDIS_SERVICE',
+        useFactory: (redisClusterService: RedisClusterService) => {
+          return redisClusterService;
+        },
+        inject: [RedisClusterService],
+      },
+    ];
+  }
+}

@@ -20,22 +20,11 @@ async function bootstrap() {
   const logger = createWinstonLogger(configService);
   app.useLogger(logger);
 
-  // PM2 인스턴스 별로 포트를 다르게 설정
-  const PORT_BASE = 50000;
-  const currentPort =
-    PORT_BASE +
-    (process.env.NODE_APP_INSTANCE
-      ? parseInt(process.env.NODE_APP_INSTANCE)
-      : 0);
-
-  logger.log(`current port: ${currentPort}`);
-  logger.log(`NODE_APP_INSTANCE: ${process.env.NODE_APP_INSTANCE}`);
-
   // microservice #GRPC
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      url: `0.0.0.0:${currentPort}`, // binding address
+      url: `0.0.0.0:50000`, // binding address
       package: [authProto.protobufPackage, healthProto.protobufPackage],
       protoPath: [
         join(__dirname, '../../proto/auth.proto'),
@@ -70,6 +59,8 @@ async function bootstrap() {
   }
 
   await app.startAllMicroservices();
+
+  logger.log(`Application is running`);
 }
 
 bootstrap();
