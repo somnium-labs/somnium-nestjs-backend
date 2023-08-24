@@ -1,73 +1,137 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 개발환경 구성
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+백엔드 구성은 redis, kafka, mongodb 등 서비스 전반에 걸쳐 사용 되는 `인프라` 시스템들과 실제 서비스하는 `앱`으로 구성된다. 인프라와 앱 모두 **`k8s`**에 설치하며, 디버깅시 호스트에서 클러스터 내부로의 접근이 필요하기 때문에 이를 설정하는 방법도 설명한다.
 
-## Description
+### 프로젝트 구조
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+MSA를 구성하는 monorepo 구조
 
 ```bash
-$ yarn install
+├── dist
+├── apps
+│   ├── api-gateway
+│   │   ├── config
+│   │   ├── src
+│   │   │   ├── auth
+│   │   │   │   └── jwt
+│   │   │   └── health
+│   │   ├── test
+│   │   └── Dockerfile
+│   └── auth
+│       ├── config
+│       ├── src
+│       │   ├── oauth
+│       │   │   └── usecase
+│       │   └── user
+│       ├── test
+│       └── Dockerfile
+├── k8s-configs
+│   ├── helm
+│   │   ├── api-gateway
+│   │   │   ├── charts
+│   │   │   └── templates
+│   │   │       └── tests
+│   │   ├── auth
+│   │   │   ├── charts
+│   │   │   └── templates
+│   │   │       └── tests
+│   │   ├── elasticsearch
+│   │   ├── kibana
+│   │   ├── mongodb
+│   │   ├── rabbitmq
+│   │   └── redis
+│   └── istio
+├── libs
+│   └── core
+│       ├── config
+│       │   ├── config.debug.yaml
+│       │   ├── config.local.yaml
+│       │   └── config.yaml
+│       └── src
+│           ├── cache
+│           ├── config
+│           ├── database
+│           ├── decorator
+│           ├── health
+│           ├── http
+│           ├── jwt
+│           ├── logger
+│           ├── middleware
+│           └── notification
+├── proto
+│   ├── auth.proto
+│   └── health.proto
+├── reports
+│   ├── 20230823-report.html
+│   └── 20230823-report.html
+├── nest-cli.json
+├── node_modules
+├── package.json
+├── stress-test.yaml
+├── tsconfig.build.json
+├── tsconfig.json
+└── yarn.lock
 ```
 
-## Running the app
+### 환경 구성
+
+| NODE_ENV | 실행환경       | 설명                                                                 |
+| -------- | -------------- | -------------------------------------------------------------------- |
+| debug    | host, minikube | 앱은 host에서 실행되고, 인프라는 minikube에서 실행되는 설정으로 구성 |
+| local    | minikube       | 앱과 인프라 모두 minikube에서 실행되는 설정으로 구성                 |
+| dev      | EKS            | 앱과 인프라 모두 EKS에서 실행되는 설정으로 구성                      |
+| prod     | EKS            | 앱과 인프라 모두 EKS에서 실행되는 설정으로 구성                      |
+
+### Minikube 설치
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
+sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 ```
 
-## Test
+### Minikube 시작
+
+private registry를 http로 접근하기 위한 설정을 추가 했다 `--insecure-registry`
+
+한 번 설정 되면 이후로는 `minikube start` 만 사용해도 된다
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+minikube start --insecure-registry=192.168.0.67:5000
 ```
 
-## Support
+### Helm 설치
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+```
 
-## Stay in touch
+### Helm Repo 추가
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+[bitnami](https://github.com/bitnami/charts/tree/main/bitnami)에서 인프라 구성에 필요한 대부분의 차트를 제공한다.
 
-## License
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+```
 
-Nest is [MIT licensed](LICENSE).
+### 클러스터 외부에서 pod에 접근할 수 있게 설정
+
+여러가지 방법이 있으나 `minikube tunnel` 을 실행하고, LoadBalancer 서비스를 사용하는 방법으로 선택했다. tunnel을 실행하면 LoadBalancer 타입 서비스의 EXTERNAL-IP가 `127.0.0.1` 로 할당되고 호스트의 포트를 통해 pod로 접속할 수 있게 된다.
+
+```bash
+minikube tunnel
+```
+
+```bash
+nohup minikube tunnel > /dev/null 2>&1 &
+```
+
+```bash
+~ kubectl get svc
+NAME             TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)
+api-gateway      LoadBalancer   10.103.172.202   127.0.0.1     8080:32497/TCP
+```
+
+localhost:8080으로 접속하면 api-gateway 서비스를 통해 api-gateway pod 중 한 곳으로 접속하게 된다.

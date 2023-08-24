@@ -10,7 +10,7 @@ spec:
       mode: DISABLE
     loadBalancer:
       simple: ROUND_ROBIN
-    # connectionPool:
-    #   http:
-    #     http2MaxRequests: 1024
-    #     maxRequestsPerConnection: 10
+    connectionPool:
+      http:
+        http2MaxRequests: 1024
+        maxRequestsPerConnection: 10
